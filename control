@@ -1,0 +1,10 @@
+Package: com.uroboro.daemonize
+Name: daemonize
+Depends: 
+Version: 0.0.1
+Architecture: iphoneos-arm
+Description: Daemon server for NotificationExplorer (C)
+Maintainer: uroboro <uroboro.845@gmail.com>
+Author: uroboro <uroboro.845@gmail.com>
+Section: System
+Tag: role::hacker
