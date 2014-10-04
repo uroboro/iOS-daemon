@@ -10,7 +10,6 @@
 #include <CoreFoundation/CFString.h>
 #include "GSEvent.h" // for: GSEventRecord, GSCurrentEventTimestamp(), GSSendSystemEvent()
 
-#define DEBUG
 typedef struct notificationPair {
 	char *name;
 	int token;
@@ -51,10 +50,6 @@ int main(int argc, char **argv) {
 		}
 	}
 	
-#ifdef DEBUG
-	fprintf(stdout, "fd is %d\n", fd);
-#endif
-
 	fd_set readfds;
 	FD_ZERO(&readfds);
 	FD_SET(fd, &readfds);
@@ -73,12 +68,6 @@ int main(int argc, char **argv) {
 		}
 		t = ntohl(t); // notify_register_file_descriptor docs: "The value is sent in network byte order."
 
-#ifdef DEBUG
-		write(STDOUT_FILENO, "read ", 5);
-		char T[3]; sprintf(T, "%d", t); write(STDOUT_FILENO, T, strlen(T));
-		write(STDOUT_FILENO, "\n", 1);
-#endif
-
 		// value in file descriptor matches token for quit notification
 		if (t == n_pair[0].token) {
 			shouldContinue = 0;
@@ -86,49 +75,22 @@ int main(int argc, char **argv) {
 
 		// value in file descriptor matches token for quit notification
 		if (t == n_pair[1].token) {
-#ifdef DEBUG
-			write(STDOUT_FILENO, "open\n", 5);
-#endif
-
 			char *identifier = readIdentifierFromFile(notiFile);
-#ifdef DEBUG
-			write(STDOUT_FILENO, "read ", 5);
-			write(STDOUT_FILENO, identifier, strlen(identifier));
-			write(STDOUT_FILENO, "\n", 1);
-#endif
 
 			int p = (identifier)?launchApp(identifier):0;
-			if (p) {
-#ifdef DEBUG
-				write(STDOUT_FILENO, "launched ", 9);
-				write(STDOUT_FILENO, identifier, strlen(identifier));
-				write(STDOUT_FILENO, "\n", 1);
-#endif
-			}
+			p ^= p; //hide unused warning
 		}
 
 		// value in file descriptor matches token for home button notification
 		if (t == n_pair[2].token) {
-#ifdef DEBUG
-			write(STDOUT_FILENO, "home\n", 5);
-#endif
-
 			sendHomeButtonEvent();
 		}
 
 		// value in file descriptor matches token for sleep button notification
 		if (t == n_pair[3].token) {
-#ifdef DEBUG
-			write(STDOUT_FILENO, "sleep\n", 6);
-#endif
-
 			sendSleepButtonEvent();
 		}
 	}
-
-#ifdef DEBUG
-	fprintf(stdout, "shutting down\n");
-#endif
 
 	// cancel
 	for (int i = 0; i < sizeof(n_pair)/sizeof(notificationPair); i++) {
