@@ -5,11 +5,11 @@
 	<key>Disabled</key>
 	<string>0</string>
 	<key>Label</key>
-	<string>com.uroboro.daemonize</string>
+	<string>com.uroboro.daemon</string>
 	<key>OnDemand</key>
 	<false/>
 	<key>Program</key>
-	<string>/usr/bin/daemonize</string>
+	<string>/usr/bin/daemon</string>
 	<key>RunAtLoad</key>
 	<true/>
 	<key>StandardErrorPath</key>
